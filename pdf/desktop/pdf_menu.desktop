@@ -1,0 +1,64 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/pdf;
+Icon=application-pdf
+Actions=1_Burst;2_Extract;3_Remove;4_Cat;5_Add;6_MarkSelected;7_Stamp;8_Pdf2Jpg;9_Info;
+Name=pdf_service_menu
+Name[ru]=Контекстное меню PDF
+X-KDE-Submenu=Service KMenu PDF
+X-KDE-Submenu[ru]=Обработка PDF файлов
+
+[Desktop Action 1_Burst]
+Icon=document-export
+Name=PDF burst
+Name[ru]=Разобрать документ на страницы
+Exec=pdf_service_menu burst %F
+
+[Desktop Action 2_Extract]
+Icon=document-export
+Name=Extract page
+Name[ru]=Извлечь страницы из документа
+Exec=pdf_service_menu extract %F
+
+[Desktop Action 3_Remove]
+Icon=document-edit
+Name=Deleted page
+Name[ru]=Удалить диапазон страниц из документа
+Exec=pdf_service_menu remove %F
+
+[Desktop Action 4_Cat]
+Icon=document-import
+Name=PDF cat
+Name[ru]=Объединить выбранные документы
+Exec=pdf_service_menu cat %F
+
+[Desktop Action 5_Add]
+Icon=document-new
+Name=Add another document
+Name[ru]=Добавить выбранные документы (в порядоке выбора)
+Exec=pdf_service_menu add %F
+
+[Desktop Action 6_MarkSelected]
+Icon=document-multiple
+Name=Combine selected files and add bookmarks
+Name[ru]=Объединить выбранные файлы и добавить закладки
+Exec=pdfmark %F
+
+[Desktop Action 7_Stamp]
+Icon=document-multiple
+Name=Stamp pages
+Name[ru]=Штамп на страницы
+Exec=pdf_service_menu stamp %F
+
+[Desktop Action 8_Pdf2Jpg]
+Icon=wizard_pdftools
+Name=PDF to jpg
+Name[ru]=Преобразовать все страницы в jpg
+Exec=pdf_service_menu pdf2jpg %F
+
+[Desktop Action 9_Info]
+Icon=help-about
+Name=Document information
+Name[ru]=Информация о документе
+Exec=pdf_service_menu info %F

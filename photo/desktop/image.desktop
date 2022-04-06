@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=image/*;
+Icon=image
+Actions=jpeg;png;pdf;
+X-KDE-Submenu=Image convert
+X-KDE-Submenu[ru]=Обрабтка изображений
+
+[Desktop Action jpeg]
+Icon=image
+Name=Convert to jpeg
+Name[ru]=преобразовать в jpeg
+Exec=image_menu jpg %F
+
+[Desktop Action png]
+Icon=image
+Name=Convert to png
+Name[ru]=преобразовать в png
+Exec=image_menu png %F
+
+[Desktop Action pdf]
+Icon=viewpdf
+Name=Convert to pdf
+Name[ru]=преобразовать в pdf
+Exec=image_menu pdf %F

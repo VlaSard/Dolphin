@@ -1,0 +1,26 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=image/jpeg;
+Icon=image
+Actions=1-Rename;2-Quality;3-Resize;
+X-KDE-Submenu=
+X-KDE-Submenu[ru]=Обработка фотографий
+
+[Desktop Action 1-Rename]
+Icon=image
+Name=Rename images of date create
+Name[ru]=Переименовать с датой снимка
+Exec=photo_menu rename %F
+
+[Desktop Action 2-Quality]
+Icon=image
+Name=Compression images
+Name[ru]=Сжать фотографии
+Exec=photo_menu quality %F
+
+[Desktop Action 3-Resize]
+Icon=image
+Name=Compression images
+Name[ru]=Изменить размер фотографий
+Exec=photo_menu resize %F

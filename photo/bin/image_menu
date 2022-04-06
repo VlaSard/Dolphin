@@ -1,0 +1,102 @@
+#! /usr/bin/env bash
+#
+# image_menu
+# 
+#
+
+# ----- variables -----
+# CmdLine="${*}"
+ScriptName="${0##*/}"
+action="${1}"
+shift
+WorkDir="${1%/*}"
+[ ! -d "${WorkDir}" ] && WorkDir="./"
+FileList=("${@##*/}")
+PrgName="${ScriptName%.[^.]*}"
+
+# ----- messages -----
+msg_script_info=("${PrgName}: не заданы параметры." "Использование ${PrgName} [action] [files]" "[action]\tjpg - преобразовать в jpeg с заданным качеством\n\t\tpng - преобразовать в png с заданным качеством\n\t\tpdf - преобразовать в pdf" "[files]\t\tодин или несколько файлов")
+
+msg_title="Обработка изображений"
+msg_finish="Операция успешно завершена."
+msg_err="Операция отменена."
+msg_info="Выберите качество изображения от 50 до 100."
+
+msg_jpg_progress="Выполняется преобразование в jpg."
+
+msg_png_progress="Выполняется преобразование в png."
+
+msg_pdf_text="Введите заголовок документа..."
+msg_pdf_savefile="Выберите файл для сохранения..."
+msg_pdf_progress="Выполняется преобразование в pdf"
+
+msg_notify_title="Dolphin"
+
+# ----- action -----
+jpg() { # преобразовать в jpg с заданным качеством
+    action_title="Преобразование в jpeg"
+
+    ImgQuality="$(zenity --scale --title="${msg_title}" --text="${msg_info}" --step=10 --value=85 --min-value=50 --max-value=100)"
+    [ -z "${ImgQuality}" ] && action_err="${msg_err}" && return 1
+    (
+        for i in "${@}"; do
+            local BaseFileName="${i%.*}"
+            convert -quality "${ImgQuality}" "${i}" "${BaseFileName}.jpg"
+        done
+    ) | zenity --progress --title="${msg_title}" --text="${msg_jpg_progress}" --pulsate --width=500 --no-cancel --auto-close --auto-kill
+
+    action_finish="${msg_finish}"
+    return
+} # end jpg
+
+png() { # преобразовать в png
+    action_finish="Преобразование в png"
+
+    ImgQuality="$(zenity --scale --title="${msg_title}" --text="${msg_info}" --step=10 --value=85 --min-value=50 --max-value=100)"
+    [ -z "${ImgQuality}" ] && action_err="${msg_err}" && return 1
+    (
+        for i in "${@}"; do
+            local BaseFileName="${i%.*}"
+            convert -quality "${ImgQuality}" "${i}" "${BaseFileName}.png"
+        done
+    ) | zenity --progress --title="${msg_title}" --text="${msg_png_progress}" --pulsate --width=500 --no-cancel --auto-close --auto-kill
+
+    action_finish="${msg_finish}"
+    return
+} # end png
+
+pdf() { # преобразовать в pdf
+    action_title="Преобразовать в pdf"
+
+    DocTitle="$(zenity --entry --title="${msg_title}" --width=500 --text="${msg_pdf_text}")"
+    [ -z "${DocTitle}" ] && action_err="${msg_err}" && return 1
+
+    FileName="$(kdialog --icon viewpdf --title "${msg_pdf_savefile}" --getsavefilename "${WorkDir}" application/pdf)"
+    [ -z "${FileName}" ] && action_err="${msg_err}" && return 1
+
+    (
+        img2pdf "${FileList[@]}" --title "${DocTitle}" --output "${FileName}"
+    ) | zenity --progress --title="${msg_title}" --text="${msg_pdf_progress}" --pulsate --width=500 --no-cancel --auto-close --auto-kill
+    
+    action_finish="${msg_finish}"
+    return
+} # end pdf
+
+# ----- main -----
+cd "${WorkDir}" || exit 1
+
+# проверка наличия параметров запуска, если нет выходим с ошибкой 1
+[ -z "${*}" ] && printf '%b\n' "${msg_script_info[@]}" && exit 1
+
+"${action}" "${FileList[@]}"
+
+# вывод всплывающего сообщение о завершении
+if [ $? -eq 1 ]; then
+    notify-send -t 5000 -i emblem-important -a "${msg_notify_title}" "${action_title}" "${action_err}"
+else
+    notify-send -t 5000 -i emblem-success -a "${msg_notify_title}" "${action_title}" "${action_finish}"
+fi
+
+cd - || exit 1
+
+exit
