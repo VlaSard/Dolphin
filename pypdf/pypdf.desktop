@@ -1,0 +1,14 @@
+[Desktop Action MergeFiles]
+Exec=(pypdf -n ${PWD##*/} -f %F) | zenity --progress --title="PyPDF" --pulsate --width=500 --no-cancel --auto-close --auto-kill
+Icon=masterpdfeditor
+Name[ru_UA]=Объединить файлы и добавить закладки
+Name=
+
+[Desktop Entry]
+Actions=MergeFiles;
+Icon=masterpdfeditor
+MimeType=application/pdf;
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-Submenu[ru_UA]=
+X-KDE-Submenu=
