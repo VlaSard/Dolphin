@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if test $# -eq 0; then
+    echo "usage: ispack [package name] or [packages list]"
+    exit 1
+fi
+
+for pack in "$@"; do
+    packname=$(pacman -Q "$pack" 2>&1)
+    res_code=$?
+    if test "$res_code" -eq 1; then
+        package=$package$pack" - not installed\n"
+        exit_code=$res_code
+    else
+        package=$package"$pack - is installed $packname\n"
+    fi
+done
+
+printf '%b' "$package"
+exit "${exit_code:-$res_code}"
